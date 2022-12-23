@@ -6,6 +6,7 @@ from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.decomposition import TruncatedSVD
+from symspellpy import SymSpell, Verbosity
 
 from streamlit_option_menu import option_menu
 
@@ -134,8 +135,22 @@ if selected == "Proses":
 
     st.write("# Pengujian Question Answering System Helpdesk")
     text = st.text_input('Pertanyaan', '')
+    sym_spell = SymSpell()
+
+    path_corpus = "tempo.txt"
+    sym_spell.create_dictionary(path_corpus)
+    text_to_list = text.split(' ')
+    update_text = []
+    
+    for w in text_to_list:
+        suggestions = sym_spell.lookup(w, Verbosity.CLOSEST, max_edit_distance=2, include_unknown=True)
+        update_text.append([s.term for s in suggestions][0])
+    
+    text = ' '.join(update_text)
+
     if text != '':
         st.write('Teks : ', text)
+        
     text = text.lower()
     text = ' '.join([word for word in text.split() if word not in (stopwords)])
     text = stemmer.stem(text)
@@ -274,13 +289,28 @@ elif selected == "QAS":
 
     st.write("# Question Answering System Helpdesk")
     text = st.text_input('Pertanyaan', '')
+    
+    # initialize
+    sym_spell = SymSpell()
+
+    # create dictionary
+    path_corpus = "tempo.txt"
+    sym_spell.create_dictionary(path_corpus)
+    text_to_list = text.split(' ')
+    update_text = []
+    
+    for w in text_to_list:
+        suggestions = sym_spell.lookup(w, Verbosity.CLOSEST, max_edit_distance=2, include_unknown=True)
+        update_text.append([s.term for s in suggestions][0])
+    
+    text = ' '.join(update_text)
+
     if text != '':
         st.write('Teks : ', text)
     text = text.lower()
     text = ' '.join([word for word in text.split() if word not in (stopwords)])
     text = stemmer.stem(text)
     text_to_column = [w for w in text.split(' ') if w in count_vectorizer.get_feature_names_out()]
-
     df_tf = pd.DataFrame(np.zeros((1, len(count_vectorizer.get_feature_names_out()))), columns=count_vectorizer.get_feature_names_out())
     for w in text_to_column:
         df_tf[w][0] = df_tf[w][0] + (1 / len(text_to_column))
