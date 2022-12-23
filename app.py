@@ -136,7 +136,6 @@ if selected == "Proses":
     text = st.text_input('Pertanyaan', '')
     if text != '':
         st.write('Teks : ', text)
-    st.write('Pengujian Text : ', text)
     text = text.lower()
     text = ' '.join([word for word in text.split() if word not in (stopwords)])
     text = stemmer.stem(text)
@@ -181,11 +180,16 @@ if selected == "Proses":
 
     top_1_index = df_result.index[0]
 
+    nan_value = df_result.loc[top_1_index, 'Cosine Similarity']
+
     df = pd.read_csv('dataset.csv', sep=';')
 
     get_pertanyaan = df['Jawaban'][top_1_index]
     if text != '':
-        st.write('Jawaban : ', get_pertanyaan)
+        if str(nan_value) != 'nan':
+            st.write('Jawaban : ', get_pertanyaan)
+        elif str(nan_value) == 'nan':
+            st.write('Jawaban : ', 'Maaf, saya tidak mengerti pertanyaan anda')
 elif selected == "QAS":
     df = pd.read_csv('dataset.csv', sep=';')
 
@@ -306,12 +310,17 @@ elif selected == "QAS":
     df_result.sort_values(by='Cosine Similarity', ascending=False, inplace=True)
 
     top_1_index = df_result.index[0]
-
+    
+    nan_value = df_result.loc[top_1_index, 'Cosine Similarity']
+    
     df = pd.read_csv('dataset.csv', sep=';')
 
     get_pertanyaan = df['Jawaban'][top_1_index]
     if text != '':
-        st.write('Jawaban : ', get_pertanyaan)
+        if str(nan_value) != 'nan':
+            st.write('Jawaban : ', get_pertanyaan)
+        elif str(nan_value) == 'nan':
+            st.write('Jawaban : ', 'Maaf, saya tidak mengerti pertanyaan anda')
     
     
 
