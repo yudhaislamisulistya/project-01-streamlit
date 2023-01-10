@@ -445,6 +445,8 @@ elif selected== "QAS":
 
         get_pertanyaan = df['Jawaban'][top_1_index]
         chat(text, get_pertanyaan)
+    else:
+        chat("", "")
 
     # if text != '':
     #     if str(nan_value) != 'nan':
