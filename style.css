@@ -1,0 +1,10 @@
+
+.css-pb6fr7 {
+    flex-direction: column;
+    align-items: flex-end;
+    position: fixed;
+    bottom: 0;
+    height: 40px;
+    margin-bottom: 80px;
+    z-index: 999;
+}
