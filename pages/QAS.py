@@ -37,6 +37,10 @@ def save_data(messages=[]):
 def save_login(user_login=[]):
     return user_login
 
+def clear_cache():
+    messages = save_data()
+    messages.clear()
+    
 def chat(user_message, response):
     
     key_user = 0
@@ -151,6 +155,11 @@ df = pd.DataFrame(matrix_p, columns=['P' + str(i) for i in range(1, num_componen
 st.write("# Question Answering System Helpdesk")
 text = ""
 text = st.text_input('', '', key = 'pertanyaanPengujian', placeholder="Masukkan Pertanyaan Anda Disini lalu Tekan Enter")
+tombolHapusChat = st.button('Hapus Chat', key='hapusChat')
+
+if tombolHapusChat:
+    clear_cache()
+    
 
 if text != "":
     # initialize
