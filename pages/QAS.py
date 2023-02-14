@@ -210,7 +210,14 @@ if text != "":
     df = df.drop(['id'], axis=1)
     df.rename(columns={'question': 'Pertanyaan', 'answer': 'Jawaban'}, inplace=True)
 
-    get_pertanyaan = df['Jawaban'][top_1_index]
+    get_pertanyaan = ""
+    if text != '':
+        if str(nan_value) != 'nan':
+            st.write('Jawaban : ', get_pertanyaan)
+            get_pertanyaan = df['Jawaban'][top_1_index]
+        elif str(nan_value) == 'nan':
+            st.write('Jawaban : ', 'Maaf, saya tidak mengerti pertanyaan anda')
+            get_pertanyaan = "Maaf, saya tidak mengerti pertanyaan anda"
     chat(text, get_pertanyaan)
 else:
     chat("", "")
